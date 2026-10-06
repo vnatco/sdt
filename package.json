@@ -1,6 +1,6 @@
 {
   "name": "shut-down-timer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A small, good-looking timer that shuts down, restarts or sleeps your computer",
   "type": "module",
   "scripts": {
