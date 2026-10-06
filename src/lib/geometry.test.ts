@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { anchorFor, CARD, CARD_WIN_H, COMPACT_RECT, dock, LINE_Y, MARGIN, MINI_WIN_H, PILL, pillRect, settleCard, settlePill, WIN_W, type Anchor } from "./geometry";
+import { anchorFor, CARD, compactWidth, CARD_WIN_H, COMPACT_RECT, dock, LINE_Y, MARGIN, MINI_WIN_H, PILL, pillRect, settleCard, settlePill, WIN_W, type Anchor } from "./geometry";
 
 const WORK = { x: 0, y: 0, w: 1920, h: 1032 };
 const ANCHORS: Anchor[] = (["left", "center", "right"] as const).flatMap((x) => (["top", "bottom"] as const).map((y) => ({ x, y })));
@@ -31,6 +31,26 @@ describe("layout", () => {
     const bottom = pillRect("warning", { x: "left", y: "bottom" });
     expect(bottom.x).toBe(COMPACT_RECT.x);
     expect(bottom.y + bottom.h).toBe(COMPACT_RECT.y + COMPACT_RECT.h);
+  });
+});
+
+describe("small pill width", () => {
+  it("hugs the clock", () => {
+    expect(compactWidth("5:09")).toBeLessThan(compactWidth("59:59"));
+    expect(compactWidth("59:59")).toBeLessThan(compactWidth("1:00:00"));
+    expect(compactWidth("99:59:59")).toBe(PILL.compact.w);
+    // Ring, padding, gaps and icon (82) plus 0.6em digits and 0.3em colons at 19px.
+    expect(compactWidth("5:09")).toBe(122);
+    expect(compactWidth("1:00:00")).toBe(151);
+  });
+  it("keeps its anchored edge when it narrows", () => {
+    const wide = pillRect("compact", { x: "right", y: "top" });
+    const narrow = pillRect("compact", { x: "right", y: "top" }, compactWidth("5:09"));
+    expect(narrow.x + narrow.w).toBe(wide.x + wide.w);
+    const l = pillRect("compact", { x: "left", y: "top" }, compactWidth("5:09"));
+    expect(l.x).toBe(COMPACT_RECT.x);
+    const c = pillRect("compact", { x: "center", y: "top" }, compactWidth("5:09"));
+    expect(c.x + c.w / 2).toBe(WIN_W / 2);
   });
 });
 

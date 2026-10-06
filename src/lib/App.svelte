@@ -17,7 +17,7 @@
     CARD_CENTER_DY,
     CARD_WIN_H,
     centerCard,
-    COMPACT_RECT,
+    compactWidth,
     LINE_Y,
     MINI_WIN_H,
     NO_ANCHOR,
@@ -32,7 +32,7 @@
   import Card from "./Card.svelte";
   import Pill from "./Pill.svelte";
   import { chime, tick as tickSound, unlock } from "./sound";
-  import { clockFromDigits, fromDigits, msUntil, nextTyped, short, twelveHour } from "./time";
+  import { clock, clockFromDigits, fromDigits, msUntil, nextTyped, short, twelveHour } from "./time";
   import { hideTip } from "./ui/tip";
 
   const MORPH_MS = 560;
@@ -68,6 +68,9 @@
               : "compact",
   );
 
+  // The small pill hugs its clock.
+  const compactW = $derived(compactWidth(clock(app.seconds)));
+
   // The shape: the card, or the pill in its current size.
   const shape = $derived.by((): { rect: Rect; r: number } => {
     if (view === "card") return { rect: CARD, r: 28 };
@@ -75,7 +78,7 @@
     // whatever the pill is showing.
     const small = morph === "shrink" || morph === "glide";
     const size = small ? "compact" : pillSize;
-    return { rect: pillRect(size, small ? NO_ANCHOR : anchor), r: PILL[size].r };
+    return { rect: pillRect(size, small ? NO_ANCHOR : anchor, compactW), r: PILL[size].r };
   });
 
   const geo = $derived(`left:${shape.rect.x}px;top:${shape.rect.y}px;width:${shape.rect.w}px;height:${shape.rect.h}px;border-radius:${shape.r}px`);
@@ -211,7 +214,7 @@
     if ((e.target as HTMLElement).closest("button, [role=slider], a")) return;
     hideTip();
     // A grabbed pill shrinks toward the cursor, keeping the spot under it.
-    const grab = view === "pill" ? { from: shape.rect, to: COMPACT_RECT, ms: geoMs, ease: SPRING_SOFT } : null;
+    const grab = view === "pill" ? { from: shape.rect, to: pillRect("compact", anchor, compactW), ms: geoMs, ease: SPRING_SOFT } : null;
     const moved = await app.guard(api.drag(grab));
     if (!moved) {
       carrying = false;
@@ -484,7 +487,8 @@
     (async () => {
       const b = await app.guard(api.boot());
       if (b) {
-        app.settings = b.settings;
+        // Always open on In; the last clock time is still remembered for At.
+        app.settings = { ...b.settings, mode: "in" };
         app.timer = b.timer;
         app.version = b.version;
         app.dryRun = b.dryRun;

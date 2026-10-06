@@ -32,7 +32,9 @@
       if (gen !== generation) return;
       origin = `${p.flipY ? "bottom" : "top"} ${p.flipX ? "right" : "left"}`;
       shown = true;
-      requestAnimationFrame(() => (el?.querySelector<HTMLButtonElement>("button:not(:disabled)"))?.focus({ preventScroll: true }));
+      // Focus the menu, not an item: a highlighted first item would look
+      // hovered. The arrow keys pick up from here.
+      requestAnimationFrame(() => el?.focus({ preventScroll: true }));
     } catch (e) {
       console.error("menu placement failed", e);
       await api.menuClose().catch(() => {});
@@ -63,7 +65,8 @@
       e.preventDefault();
       const btns = [...(el?.querySelectorAll<HTMLButtonElement>("button:not(:disabled)") ?? [])];
       const i = btns.indexOf(document.activeElement as HTMLButtonElement);
-      btns[(i + (e.key === "ArrowDown" ? 1 : -1) + btns.length) % btns.length]?.focus();
+      const next = i < 0 ? (e.key === "ArrowDown" ? 0 : btns.length - 1) : (i + (e.key === "ArrowDown" ? 1 : -1) + btns.length) % btns.length;
+      btns[next]?.focus();
     }
   }
 
@@ -85,7 +88,7 @@
 
 <!-- A click on the transparent shadow margin closes the menu. -->
 <div class="backdrop" role="presentation" onpointerdown={(e) => e.target === e.currentTarget && close()}>
-  <div class="menu" class:shown class:closing bind:this={el} role="menu" style:margin="{MARGIN}px" style:transform-origin={origin}>
+  <div class="menu" class:shown class:closing bind:this={el} role="menu" tabindex="-1" style:margin="{MARGIN}px" style:transform-origin={origin}>
     <!-- Fresh elements on every open: reused ones keep a stale hover from
          wherever the mouse was when the menu last closed. -->
     {#each items as it, i (`${opened}:${i}`)}
@@ -138,6 +141,9 @@
       0 12px 32px rgb(0 0 0 / 0.55);
     font-size: 13px;
     opacity: 0;
+  }
+  .menu:focus {
+    outline: none;
   }
   .menu.shown {
     animation: pop 0.22s var(--ease-out) both;

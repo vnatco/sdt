@@ -66,7 +66,7 @@
     "license": "Apache-2.0",
     "publisher": "vnat.co",
     "homepage": "https://github.com/vnatco/sdt",
-    "copyright": "Copyright 2026 Vladimer Natchkepia",
+    "copyright": "Copyright 2026 VnatCo",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -76,7 +76,7 @@
     ],
     "windows": {
       "nsis": {
-        "installMode": "perMachine",
+        "installMode": "both",
         "installerIcon": "icons/icon.ico",
         "headerImage": "windows/installer-header.bmp",
         "sidebarImage": "windows/installer-sidebar.bmp",

@@ -15,8 +15,24 @@ import type { Rect } from "./api";
 export const MARGIN = 28;
 
 export type PillSize = "compact" | "hover" | "notice" | "firing" | "warning";
+
+// The small pill hugs its clock: ring, digits and the action icon. Digits
+// sit in 0.6em slots and colons in 0.3em ones (see Digits.svelte), at 19px.
+const DIGIT_W = 0.6 * 19;
+const COLON_W = 0.3 * 19;
+/** Padding, ring, gaps and icon around the digits. */
+const COMPACT_CHROME = 9 + 26 + 9 + 9 + 15 + 14;
+
+/** Width of the small pill for a clock text like "1:05:09". */
+export function compactWidth(text: string): number {
+  const digits = text.replace(/\D/g, "").length;
+  const colons = text.length - digits;
+  return Math.ceil(COMPACT_CHROME + digits * DIGIT_W + colons * COLON_W);
+}
+
 export const PILL: Record<PillSize, { w: number; h: number; r: number }> = {
-  compact: { w: 212, h: 44, r: 22 },
+  /** The widest small pill (99:59:59); the layout leaves room for it. */
+  compact: { w: compactWidth("99:59:59"), h: 44, r: 22 },
   hover: { w: 340, h: 58, r: 29 },
   firing: { w: 264, h: 52, r: 26 },
   notice: { w: 360, h: 66, r: 26 },
@@ -48,16 +64,20 @@ export interface Anchor {
 }
 export const NO_ANCHOR: Anchor = { x: "center", y: "top" };
 
-/** The small pill, in window coordinates. */
+/** The widest small pill, in window coordinates: placement works with it. */
 export const COMPACT_RECT: Rect = { x: (WIN_W - COMPACT.w) / 2, y: LINE_Y - COMPACT.h / 2, w: COMPACT.w, h: COMPACT.h };
 
-/** Where a pill of the given size sits in the window. */
-export function pillRect(size: PillSize, anchor: Anchor): Rect {
+/**
+ * Where a pill of the given size sits in the window. `compactW` is the small
+ * pill's current width; anchored left or right it keeps that edge.
+ */
+export function pillRect(size: PillSize, anchor: Anchor, compactW = COMPACT.w): Rect {
   const p = PILL[size];
+  const w = size === "compact" ? compactW : p.w;
   const c = COMPACT_RECT;
-  const x = anchor.x === "left" ? c.x : anchor.x === "right" ? c.x + c.w - p.w : (WIN_W - p.w) / 2;
+  const x = anchor.x === "left" ? c.x : anchor.x === "right" ? c.x + c.w - w : (WIN_W - w) / 2;
   const y = anchor.y === "top" ? c.y : c.y + c.h - p.h;
-  return { x, y, w: p.w, h: p.h };
+  return { x, y, w, h: p.h };
 }
 
 const EDGE = 8;

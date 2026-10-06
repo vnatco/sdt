@@ -279,7 +279,10 @@
           <span>Source Code</span>
         </button>
       </div>
-      <p class="fine">© 2026 Vladimer Natchkepia · Apache License 2.0</p>
+      <p class="fine">
+        © {new Date().getFullYear()} by
+        <button class="by" onclick={() => app.guard(openUrl("https://github.com/vnatco"))}>VnatCo</button>
+      </p>
     </div>
   </div>
 
@@ -749,6 +752,18 @@
     height: 40px;
     border-radius: 12px;
     font-size: 13px;
+  }
+  .by {
+    color: var(--text-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--line-2);
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+  .by:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
   }
   .fine {
     margin-top: auto;

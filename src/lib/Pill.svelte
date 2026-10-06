@@ -138,9 +138,10 @@
     display: flex;
     align-items: center;
   }
+  /* Sizes match compactWidth() in geometry.ts. */
   .compact {
-    padding: 0 15px 0 9px;
-    gap: 10px;
+    padding: 0 14px 0 9px;
+    gap: 9px;
   }
   .hover {
     padding: 0 10px 0 12px;
@@ -165,6 +166,7 @@
   }
   .compact .time {
     flex: 1;
+    min-width: 0;
   }
   .paused .time {
     animation: blink 1.6s ease-in-out infinite;
