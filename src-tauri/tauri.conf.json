@@ -57,7 +57,9 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "category": "Utility",
     "shortDescription": "Shut down, restart or sleep your computer on a timer",
     "longDescription": "A small timer that shuts down, restarts or puts your computer to sleep when time is up. It shrinks to a pill that floats on top of the screen while it counts down, and lives in the tray.",
@@ -76,6 +78,8 @@
       "nsis": {
         "installMode": "perMachine",
         "installerIcon": "icons/icon.ico",
+        "headerImage": "windows/installer-header.bmp",
+        "sidebarImage": "windows/installer-sidebar.bmp",
         "displayLanguageSelector": false
       }
     }

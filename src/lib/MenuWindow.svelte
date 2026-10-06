@@ -14,12 +14,14 @@
   let origin = $state("top left");
   let el: HTMLDivElement | undefined = $state();
   let generation = 0;
+  let opened = $state(0);
 
   async function open(next: MenuItem[]) {
     const gen = ++generation;
     shown = false;
     closing = false;
     items = next;
+    opened = gen;
     await tick();
     if (!el || gen !== generation) return;
     // Layout is synchronous even while the window is hidden.
@@ -84,7 +86,9 @@
 <!-- A click on the transparent shadow margin closes the menu. -->
 <div class="backdrop" role="presentation" onpointerdown={(e) => e.target === e.currentTarget && close()}>
   <div class="menu" class:shown class:closing bind:this={el} role="menu" style:margin="{MARGIN}px" style:transform-origin={origin}>
-    {#each items as it, i (i)}
+    <!-- Fresh elements on every open: reused ones keep a stale hover from
+         wherever the mouse was when the menu last closed. -->
+    {#each items as it, i (`${opened}:${i}`)}
       {#if it.kind === "sep"}
         <div class="sep" role="separator"></div>
       {:else if it.kind === "label"}

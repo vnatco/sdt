@@ -1,0 +1,39 @@
+name: Release
+
+# Push a tag like v0.1.0 to build the Windows installer and publish it.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: npm ci
+      - run: npm test
+      - run: cargo test
+        working-directory: src-tauri
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: Shut Down Timer ${{ github.ref_name }}
+          releaseBody: |
+            Download the **x64-setup.exe** file below and run it. It installs for all users (administrator rights needed) and adds Shut Down Timer to the Start menu.
+
+            Windows 10 and 11.
+          releaseDraft: false
+          prerelease: false

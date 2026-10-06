@@ -761,6 +761,7 @@
   .sheet-bg {
     position: absolute;
     inset: 0;
+    z-index: 20;
     border-radius: 28px;
     background: rgb(10 9 14 / 0.6);
     backdrop-filter: blur(6px);
@@ -768,6 +769,7 @@
   .sheet {
     position: absolute;
     left: 14px;
+    z-index: 21;
     right: 14px;
     bottom: 14px;
     padding: 22px 20px 12px;
