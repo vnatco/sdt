@@ -1,0 +1,144 @@
+/* Global styles and design tokens. The accent follows the chosen action and
+   animates between them (the colours are registered so they can transition). */
+
+@import "@fontsource-variable/figtree/wght.css";
+@import "@fontsource-variable/outfit/wght.css";
+
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ff7052;
+}
+@property --accent-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffb55a;
+}
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Lands with a soft overshoot, like the island it imitates. */
+  --spring: cubic-bezier(0.34, 1.32, 0.5, 1);
+  --spring-soft: cubic-bezier(0.3, 1.18, 0.5, 1);
+  --font: "Figtree Variable", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-num: "Outfit Variable", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+
+  --bg-1: #1a1921;
+  --bg-2: #0f0e14;
+  --surface: rgb(255 255 255 / 0.045);
+  --surface-2: rgb(255 255 255 / 0.075);
+  --hover: rgb(255 255 255 / 0.09);
+  --press: rgb(255 255 255 / 0.13);
+  --line: rgb(255 255 255 / 0.08);
+  --line-2: rgb(255 255 255 / 0.14);
+  --text: #f3f2f7;
+  --text-2: #a9a7b6;
+  --text-3: #6e6c7b;
+  --danger: #ff4d5e;
+  --danger-2: #ff8a5c;
+  --on-accent: #16131a;
+
+  --accent: #ff7052;
+  --accent-2: #ffb55a;
+  transition:
+    --accent 0.7s var(--ease-out),
+    --accent-2 0.7s var(--ease-out);
+  color-scheme: dark;
+}
+:root[data-action="restart"] {
+  --accent: #4a9dff;
+  --accent-2: #5ce1e6;
+}
+:root[data-action="sleep"] {
+  --accent: #9179ff;
+  --accent-2: #e08bff;
+}
+:root[data-warning] {
+  --accent: #ff4d5e;
+  --accent-2: #ff8a5c;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+}
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  cursor: default;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--accent) 80%, white);
+  outline-offset: 2px;
+}
+
+.num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+.tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: #26242e;
+  color: var(--text);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 8px 24px rgb(0 0 0 / 0.45);
+  opacity: 0;
+  scale: 0.94;
+  transition:
+    opacity 0.14s ease-out,
+    scale 0.2s var(--ease-out),
+    transform 0.22s var(--ease-out);
+}
+.tip:not(.on) {
+  transition:
+    opacity 0.1s ease-in,
+    scale 0.1s ease-in;
+}
+.tip.on {
+  opacity: 1;
+  scale: 1;
+}

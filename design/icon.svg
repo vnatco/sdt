@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2B2735"/>
+      <stop offset="1" stop-color="#0D0C12"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="0.42" cy="0.62" r="0.62">
+      <stop offset="0" stop-color="#FF6A4D" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#FF6A4D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.03"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="arc" gradientUnits="userSpaceOnUse" x1="720" y1="260" x2="260" y2="700">
+      <stop offset="0" stop-color="#FFC75F"/>
+      <stop offset="0.5" stop-color="#FF7A4F"/>
+      <stop offset="1" stop-color="#F2416B"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFE2D4"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="14"/>
+    </filter>
+  </defs>
+
+  <rect x="40" y="40" width="944" height="944" rx="216" fill="url(#bg)"/>
+  <rect x="40" y="40" width="944" height="944" rx="216" fill="url(#warm)"/>
+  <rect x="41.5" y="41.5" width="941" height="941" rx="214.5" fill="none" stroke="url(#edge)" stroke-width="3"/>
+
+  <!-- The open ring of a power symbol, drawn as a timer's track. -->
+  <path d="M 655.1 311 A 270 270 0 1 1 368.9 311" fill="none" stroke="#FFFFFF" stroke-opacity="0.10" stroke-width="84" stroke-linecap="round"/>
+
+  <!-- Time left, glowing. -->
+  <path d="M 655.1 311 A 270 270 0 1 1 258.3 632.3" fill="none" stroke="url(#arc)" stroke-width="84" stroke-linecap="round" filter="url(#glow)" opacity="0.75"/>
+  <path d="M 655.1 311 A 270 270 0 1 1 258.3 632.3" fill="none" stroke="url(#arc)" stroke-width="84" stroke-linecap="round"/>
+
+  <!-- The bar through the gap. -->
+  <rect x="470" y="172" width="84" height="340" rx="42" fill="#FFFFFF" fill-opacity="0.35" filter="url(#soft)"/>
+  <rect x="470" y="172" width="84" height="340" rx="42" fill="url(#bar)"/>
+</svg>

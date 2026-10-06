@@ -1,0 +1,11 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the timer and its menu",
+  "windows": ["main", "menu"],
+  "permissions": [
+    "core:default",
+    "opener:allow-open-url",
+    "log:default"
+  ]
+}
