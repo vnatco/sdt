@@ -28,7 +28,7 @@ Requirements: Windows 10/11, [Rust](https://rustup.rs) (stable, MSVC), [Node.js]
 ```bash
 npm install
 npm run tauri dev      # run in development
-npm run tauri build    # build the installer
+npm run dist           # build the installer: src-tauri/target/release/bundle/nsis/ShutDownTimer_<version>_x64-setup.exe
 ```
 
 Tests:
